@@ -1,25 +1,20 @@
 (function () {
-  const toggle = document.getElementById('menu-toggle');
   const header = document.querySelector('.site-header');
-  const quickBarRendered = document.querySelector('.floating-quick-actions');
+  const toggle = document.getElementById('menu-toggle');
+  const nav = document.getElementById('main-nav');
 
-  if (!quickBarRendered) {
+  if (!document.querySelector('.floating-quick-actions')) {
     const quickBar = document.createElement('div');
     quickBar.className = 'floating-quick-actions';
-
-    const ctaButtons = [
-      { href: 'pricing.html', label: 'See pricing', type: 'primary' },
-      { href: 'programs.html#schedule', label: 'View schedule', type: 'secondary' },
-      { href: 'connect.html', label: 'Message us', type: 'secondary' },
-    ];
-
-    quickBar.innerHTML = ctaButtons
-      .map((item) => `<a class="button ${item.type}" href="${item.href}">${item.label}</a>`)
-      .join('');
+    quickBar.innerHTML = `
+      <a class="button primary" href="pricing.html">See pricing</a>
+      <a class="button secondary" href="programs.html#schedule">View schedule</a>
+      <a class="button secondary" href="connect.html">Message us</a>
+    `;
     header?.insertAdjacentElement('afterend', quickBar);
   }
 
-  if (toggle && header) {
+  if (toggle && header && nav) {
     toggle.addEventListener('click', () => {
       header.classList.toggle('nav-open');
       const expanded = toggle.getAttribute('aria-expanded') === 'true';
@@ -33,4 +28,16 @@
       toggle.setAttribute('aria-expanded', 'false');
     });
   }
+
+  const setScrolled = () => {
+    if (!header) return;
+    if (window.scrollY > 14) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  };
+
+  window.addEventListener('scroll', setScrolled, { passive: true });
+  setScrolled();
 })();
